@@ -1,0 +1,1491 @@
+//Student_Management_System.java
+
+//JHelpTextPanel.java
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import java.io.*;
+//定义帮助文档类
+class JHelpTextPanel extends JPanel
+{
+Font newSmallTitleFont=new Font("楷体",Font.BOLD,12);
+JTextArea HelpText=new JTextArea();
+JHelpTextPanel()
+{
+   setLayout(null);
+   setBackground(Color.orange);
+   HelpText.setBackground(Color.orange);
+   HelpText.setForeground(Color.red);
+   HelpText.setFont(newSmallTitleFont);
+   HelpText.setBounds(0,0,600,600);
+   add(HelpText);
+}
+}
+
+//Student_InforPanel .java
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+import java.io.*;
+
+class Student_InforPanel extends JPanel implements ActionListener
+{
+//四种常用字体的定义
+Font newTitleFont=new Font("楷体",Font.BOLD,40);
+Font newSmallTitleFont=new Font("楷体",Font.BOLD,25);
+Font newCommonFont=new Font("宋体",Font.BOLD,20);
+Font newSubMenuFont=new Font("宋体",Font.BOLD,15);
+Font NewSubMenuFont=new Font("宋体",Font.BOLD,10);
+//性别数组定义
+String os[]={" 男 "," 女 "};
+   //定义确认对话框图标
+ImageIcon thinker=new ImageIcon("ICON//thinker.gif");
+    //定义学生信息管理系统面板菜单控件
+JLabel StudentSno_Clue=new JLabel("学号:");
+JLabel StudentName_Clue=new JLabel("姓名:");
+JLabel StudentSex_Clue=new JLabel("性别:");
+JLabel StudentAge_Clue=new JLabel("年龄:");
+JLabel StudentClass_Clue=new JLabel("班级:");
+JLabel StudentDept_Clue=new JLabel("系别:");
+JTextField StudentSno_Input=new JTextField();
+JTextField StudentName_Input=new JTextField();
+ComboBoxModel Othermode=new OtherAModel();
+JComboBox StudentSex_Input=new JComboBox(Othermode);
+JTextField StudentAge_Input=new JTextField();
+JTextField StudentClass_Input=new JTextField();
+JTextField StudentDept_Input=new JTextField();
+JTextArea QueryInforShow=new JTextArea();
+    JLabel QueryClue=new JLabel("以下是你要查询的学生信息:");
+JButton Add_StudentInformation=new JButton("增加学生信息");
+JButton Del_StudentInformation=new JButton("删除学生信息");
+JButton Query_StudentInformation=new JButton("查询学生信息");
+    JButton Modify_StudentInformation=new JButton("修改学生信息");
+    //定义变量
+    int ValidAge;
+    String SnoOrigin;
+    Student_InforPanel()
+    {
+setBackground(Color.orange);
+QueryInforShow.setBackground(Color.orange);
+setLayout(null);
+StudentSno_Clue.setBounds(270,120,80,30);
+StudentSno_Clue.setFont(newCommonFont);
+StudentSno_Input.setBounds(350,120,120,30);
+StudentName_Clue.setBounds(270,170,80,30);
+StudentName_Clue.setFont(newCommonFont);
+StudentName_Input.setBounds(350,170,120,30);
+StudentSex_Clue.setBounds(270,220,80,30);
+StudentSex_Clue.setFont(newCommonFont);
+StudentSex_Input.setBounds(350,220,120,30);
+StudentAge_Clue.setBounds(270,270,80,30);
+StudentAge_Clue.setFont(newCommonFont);
+StudentAge_Input.setBounds(350,270,120,30);
+StudentClass_Clue.setBounds(270,320,80,30);
+StudentClass_Clue.setFont(newCommonFont);
+StudentClass_Input.setBounds(350,320,120,30);
+StudentDept_Clue.setBounds(270,370,80,30);
+StudentDept_Clue.setFont(newCommonFont);
+StudentDept_Input.setBounds(350,370,120,30);
+Query_StudentInformation.setBounds(80,120,130,30);
+Query_StudentInformation.setFont(newSubMenuFont);
+Query_StudentInformation.addActionListener(this);
+QueryClue.setBounds(80,180,300,50);
+QueryClue.setFont(newSubMenuFont);
+        QueryInforShow.setBounds(80,220,530,100);
+QueryInforShow.setFont(newSubMenuFont);
+Del_StudentInformation.setBounds(80,120,130,30);
+Del_StudentInformation.setFont(newSubMenuFont);
+Del_StudentInformation.addActionListener(this);
+Add_StudentInformation.setBounds(80,170,130,30);
+Add_StudentInformation.setFont(newSubMenuFont);
+Add_StudentInformation.addActionListener(this);
+Modify_StudentInformation.setBounds(80,220,130,30);
+Modify_StudentInformation.setBounds(80,220,130,30);
+Modify_StudentInformation.setFont(newSubMenuFont);
+Modify_StudentInformation.addActionListener(this);
+
+add(StudentSno_Clue);
+add(StudentSno_Input);
+add(StudentName_Clue);
+add(StudentName_Input);
+add(StudentSex_Clue);
+add(StudentSex_Input);
+add(StudentAge_Clue);
+add(StudentAge_Input);
+     add(StudentClass_Clue);
+add(StudentClass_Input);
+add(StudentDept_Clue);
+add(StudentDept_Input);
+add(QueryClue);
+add(QueryInforShow);
+add(Add_StudentInformation);
+add(Del_StudentInformation);
+add(Query_StudentInformation);
+        add(Modify_StudentInformation);
+}
+public void actionPerformed(ActionEvent e)
+{
+      if(e.getSource()==Add_StudentInformation)
+      {
+if(IsValidAge(StudentAge_Input.getText()))
+{
+      String ***=(String)StudentSex_Input.getSelectedItem();
+   MainMenu.myDatabase.Add_Database_Information(StudentSno_Input.getText(),
+   StudentName_Input.getText(),***,ValidAge,StudentClass_Input.getText(),StudentDept_Input.getText());
+   emptyInput();
+     }
+   }
+   if(e.getSource()==Del_StudentInformation)
+   {
+       QueryInforShow.setText("");
+       if(MainMenu.myDatabase.Query_Database_Information(StudentSno_Input.getText()))
+        {
+   QueryInforShow.setText(DataBaseControl.temptInformation);
+   int result=JOptionPane.showConfirmDialog(null,"你确定要删除该生信息吗？","Confirm Message",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,thinker);
+   if(result==JOptionPane.YES_OPTION)
+   {
+          if(MainMenu.myDatabase.Del_Database_Information(StudentSno_Input.getText()))
+          JOptionPane.showMessageDialog(null,"删除操作成功！","Happy Message",JOptionPane.PLAIN_MESSAGE);
+          else
+          JOptionPane.showMessageDialog(null,"数据库操作出现异常，删除操作失败！","Error Message",JOptionPane.ERROR_MESSAGE);
+      }
+     }
+     else
+      QueryInforShow.setText("对不起，没有找到你要删除的学生信息.");
+      }
+   if(e.getSource()==Query_StudentInformation)
+   {
+QueryInforShow.setText("");
+        if(MainMenu.myDatabase.Query_Database_Information(StudentSno_Input.getText()))
+        QueryInforShow.setText(DataBaseControl.temptInformation);
+        else
+         QueryInforShow.setText("对不起，没有你想要查询的学生信息");
+   }
+   if(e.getSource()==Modify_StudentInformation)
+   {
+if(IsValidAge(StudentAge_Input.getText()))
+        MainMenu.myDatabase.Modify_Database_Information(SnoOrigin,StudentSno_Input.getText(),
+        StudentName_Input.getText(),ValidAge,StudentClass_Input.getText(),StudentDept_Input.getText());
+   }
+}
+    public boolean IsValidAge(String StringAge)
+    {
+try
+{
+   ValidAge=Integer.parseInt(StringAge);
+}catch(NumberFormatException e)
+{
+   e.printStackTrace();
+   return false;
+}
+if(ValidAge<=120&ValidAge>0)
+   return true;
+else
+   {
+    JOptionPane.showMessageDialog(null,"你输入的年龄不合实际情况\n请重新输入!","WARNING MESSAGE",
+    JOptionPane.WARNING_MESSAGE);
+    return false;
+   }
+}
+
+class OtherAModel extends DefaultComboBoxModel
+    {
+     OtherAModel()
+     {
+      for(int i=0;i<os.length;i++)
+      addElement(os[i]);
+     }
+      }
+      public void emptyInput()
+      {
+    StudentSno_Input.setText("");
+    StudentAge_Input.setText("");
+    StudentName_Input.setText("");
+    StudentClass_Input.setText("");
+    StudentDept_Input.setText("");
+   }
+        public void OnlyShowSno()
+         {
+           StudentSno_Clue.setVisible(true);
+           StudentSno_Input.setVisible(true);
+           StudentSno_Input.setText("");
+           QueryClue.setVisible(true);
+           QueryInforShow.setVisible(true);
+           StudentName_Clue.setVisible(false);
+           StudentName_Input.setVisible(false);
+           StudentSex_Clue.setVisible(false);
+           StudentSex_Input.setVisible(false);
+           StudentAge_Clue.setVisible(false);
+           StudentAge_Input.setVisible(false);
+           StudentClass_Clue.setVisible(false);
+           StudentClass_Input.setVisible(false);
+           StudentDept_Clue.setVisible(false);
+        StudentDept_Input.setVisible(false);
+       }
+       //显示学生信息的所有面板控件
+       public void ShowWhole()
+       {
+        StudentSno_Clue.setVisible(true);
+        StudentSno_Input.setVisible(true);
+        StudentSno_Input.setText("");
+        QueryClue.setVisible(false);
+        QueryInforShow.setVisible(false);
+        StudentName_Clue.setVisible(true);
+        StudentName_Input.setVisible(true);
+        StudentName_Input.setText("");
+        StudentSex_Clue.setVisible(true);
+        StudentSex_Input.setVisible(true);
+        StudentAge_Clue.setVisible(true);
+        StudentAge_Input.setVisible(true);
+        StudentAge_Input.setText("");
+        StudentClass_Clue.setVisible(true);
+        StudentClass_Input.setVisible(true);
+        StudentClass_Input.setText("");
+        StudentDept_Clue.setVisible(true);
+        StudentDept_Input.setVisible(true);
+        StudentDept_Input.setText("");
+    }
+}
+
+
+
+
+
+
+
+
+//Student_ScorePanel.java
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+import javax.swing.event.*;
+class Student_ScorePanel extends JPanel implements ActionListener
+{
+//三种常用字体的定义
+Font newTitleFont=new Font("楷体",Font.BOLD,40);
+Font newSmallTitleFont=new Font("楷体",Font.BOLD,25);
+Font newCommonFont=new Font("宋体",Font.BOLD,20);
+Font newSubMenuFont=new Font("宋体",Font.BOLD,15);
+Font NewSubMenuFont=new Font("宋体",Font.BOLD,10);
+    //定义确认对话框图标
+ImageIcon thinker=new ImageIcon("ICON//thinker.gif");
+JLabel ScoreSno_Clue=new JLabel("学号:");
+JLabel ScoreEnglish_Clue=new JLabel("英语:");
+JLabel ScoreSeniorMath_Clue=new JLabel("高数:");
+JLabel ScoreC_Clue=new JLabel("C:");
+JLabel ScoreVC_Clue=new JLabel("VC:");
+JLabel ScoreJAVA_Clue=new JLabel("JAVA:");
+JTextField ScoreSno_Input=new JTextField();
+JTextField ScoreEnglish_Input=new JTextField();
+JTextField ScoreSeniorMath_Input=new JTextField();
+JTextField ScoreC_Input=new JTextField();
+JTextField ScoreVC_Input=new JTextField();
+JTextField ScoreJAVA_Input=new JTextField();
+JTextArea ScoreShow=new JTextArea();
+JLabel ScoreShowClue=new JLabel("你要查询的学生成绩信息为:");
+JButton Add_ScoreInformation=new JButton("增加学生成绩");
+JButton Del_ScoreInformation=new JButton("删除学生成绩");
+JButton Query_ScoreInformation=new JButton("查询学生成绩");
+    JButton Modify_ScoreInformation=new JButton("修改学生成绩");
+    //定义变量
+    int ValidScore;
+    String ScoreSno;
+Student_ScorePanel()
+{
+//学生成绩管理面板设置控件
+     setBackground(Color.orange);
+     ScoreShow.setBackground(Color.orange);
+     setLayout(null);
+     ScoreSno_Clue.setBounds(270,120,80,30);
+ScoreSno_Clue.setFont(newCommonFont);
+ScoreSno_Input.setBounds(350,120,120,30);
+ScoreEnglish_Clue.setBounds(270,170,80,30);
+ScoreEnglish_Clue.setFont(newCommonFont);
+ScoreEnglish_Input.setBounds(350,170,120,30);
+ScoreSeniorMath_Clue.setBounds(270,220,80,30);
+ScoreSeniorMath_Clue.setFont(newCommonFont);
+ScoreSeniorMath_Input.setBounds(350,220,120,30);
+ScoreC_Clue.setBounds(270,270,80,30);
+ScoreC_Clue.setFont(newCommonFont);
+ScoreC_Input.setBounds(350,270,120,30);
+ScoreVC_Clue.setBounds(270,320,80,30);
+ScoreVC_Clue.setFont(newCommonFont);
+ScoreVC_Input.setBounds(350,320,120,30);
+ScoreJAVA_Clue.setBounds(270,370,80,30);
+ScoreJAVA_Clue.setFont(newCommonFont);
+ScoreJAVA_Input.setBounds(350,370,120,30);
+Query_ScoreInformation.setBounds(80,120,130,30);
+Query_ScoreInformation.setFont(newSubMenuFont);
+Query_ScoreInformation.addActionListener(this);
+ScoreShowClue.setFont(newSubMenuFont);
+ScoreShowClue.setBounds(80,180,300,50);
+ScoreShow.setFont(newSubMenuFont);
+ScoreShow.setBounds(80,220,530,100);
+Del_ScoreInformation.setBounds(80,120,130,30);
+Del_ScoreInformation.setFont(newSubMenuFont);
+Del_ScoreInformation.addActionListener(this);
+Add_ScoreInformation.setBounds(80,170,130,30);
+Add_ScoreInformation.setFont(newSubMenuFont);
+Add_ScoreInformation.addActionListener(this);
+Modify_ScoreInformation.setBounds(80,220,130,30);
+     Modify_ScoreInformation.setFont(newSubMenuFont);
+     Modify_ScoreInformation.addActionListener(this);
+
+     add(ScoreSno_Clue);
+     add(ScoreSno_Input);
+     add(ScoreEnglish_Clue);
+     add(ScoreEnglish_Input);
+     add(ScoreSeniorMath_Clue);
+     add(ScoreC_Clue);
+     add(ScoreSeniorMath_Input);
+     add(ScoreC_Input);
+     add(ScoreVC_Clue);
+     add(ScoreVC_Input);
+     add(ScoreJAVA_Clue);
+     add(ScoreJAVA_Input);
+     add(ScoreShow);
+     add(ScoreShowClue);
+     add(Add_ScoreInformation);
+     add(Del_ScoreInformation);
+     add(Query_ScoreInformation);
+     add(Modify_ScoreInformation);
+}
+public void actionPerformed(ActionEvent e)
+{
+if(e.getSource()==Query_ScoreInformation)//查询按纽事件触发处理
+{
+   if(MainMenu.myDatabase.QueryScoreFunction(ScoreSno_Input.getText()))
+   {
+    ScoreShow.setText("");
+    ScoreShow.append("学号\t\t英语\t高数\tC\tVC\tJAVA\n");
+    ScoreShow.append(MainMenu.myDatabase.Student_Score[MainMenu.myDatabase.NowScoreNum]);
+   }
+   else
+   {
+    ScoreShow.setText("");
+    ScoreShow.setText("对不起，没有你想要查找的学生信息!");
+   }
+}
+if(e.getSource()==Add_ScoreInformation)//增加学生成绩信息按纽的时间触发
+{
+   if(IsValidScore(ScoreEnglish_Input.getText())&&IsValidScore(ScoreSeniorMath_Input.getText())&&IsValidScore(
+    ScoreC_Input.getText())&&IsValidScore(ScoreVC_Input.getText())&&IsValidScore(ScoreJAVA_Input.getText()))
+    {
+     IsValidScore(ScoreEnglish_Input.getText());
+        int englishscore=ValidScore;
+        IsValidScore(ScoreSeniorMath_Input.getText());
+        int seniorscore=ValidScore;
+        IsValidScore(ScoreC_Input.getText());
+        int cscore=ValidScore;
+        IsValidScore(ScoreVC_Input.getText());
+        int vcscore=ValidScore;
+        IsValidScore(ScoreJAVA_Input.getText());
+        int javascore=ValidScore;
+     MainMenu.myDatabase.addStudentScoreInformation(ScoreSno_Input.getText(),englishscore,seniorscore, cscore, vcscore, javascore);
+        emptyInput();
+    }
+}
+if(e.getSource()==Del_ScoreInformation)//删除学生成绩信息事件触发处理
+{
+   if(MainMenu.myDatabase.QueryScoreFunction(ScoreSno_Input.getText()))
+   {
+    ScoreShow.setText("");
+    ScoreShow.append("学号\t\t英语\t高数\tC\tVC\tJAVA\n");
+    ScoreShow.append(MainMenu.myDatabase.Student_Score[MainMenu.myDatabase.NowScoreNum]);
+    int result=JOptionPane.showConfirmDialog(null,"你真的要删除该学生的成绩信息吗？","Confirm Message",JOptionPane.YES_NO_OPTION,
+    JOptionPane.QUESTION_MESSAGE,thinker);
+    if(result==JOptionPane.YES_OPTION)
+     MainMenu.myDatabase.DelScoreFunction(ScoreSno_Input.getText());
+   }
+   else
+   {
+    ScoreShow.setText("");
+    ScoreShow.setText("对不起，你要删除的学生成绩信息不存在！");
+   }
+}
+if(e.getSource()==Modify_ScoreInformation)//修改数据库中学生成绩信息事件的触发
+{
+   if(IsValidScore(ScoreEnglish_Input.getText())&&IsValidScore(ScoreSeniorMath_Input.getText())&&IsValidScore(
+       ScoreC_Input.getText())&&IsValidScore(ScoreVC_Input.getText())&&IsValidScore(ScoreJAVA_Input.getText()))
+       {
+        IsValidScore(ScoreEnglish_Input.getText());
+           int englishscore=ValidScore;
+           IsValidScore(ScoreSeniorMath_Input.getText());
+           int seniorscore=ValidScore;
+           IsValidScore(ScoreC_Input.getText());
+           int cscore=ValidScore;
+           IsValidScore(ScoreVC_Input.getText());
+           int vcscore=ValidScore;
+           IsValidScore(ScoreJAVA_Input.getText());
+           int javascore=ValidScore;
+        MainMenu.myDatabase.ModifyStudentScoreInformation(ScoreSno_Input.getText(),ScoreSno,
+        englishscore,seniorscore, cscore, vcscore, javascore);
+           emptyInput();
+                }
+}
+}
+public boolean IsValidScore(String stringAge)//判断成绩输入是否合法
+{
+try
+{
+   ValidScore=Integer.parseInt(stringAge);
+      }catch(NumberFormatException e)
+      {
+     JOptionPane.showMessageDialog(null,"成绩输入中含有非法字符!","ERROR MESSAGE",
+     JOptionPane.ERROR_MESSAGE);
+    return false;
+   }
+   if(ValidScore>100||ValidScore<0)
+     {
+      JOptionPane.showMessageDialog(null,"分数只能在0~100之间的整数！","ERROR MESSAGE",
+      JOptionPane.ERROR_MESSAGE);
+            return false;
+     }
+     return true;
+}
+//只显示学生成绩面板中学号相关控件
+public void ScoreShowOnlySno()
+{
+   ScoreSno_Clue.setVisible(true);
+   ScoreSno_Input.setVisible(true);
+   ScoreSno_Input.setText("");
+   ScoreShowClue.setVisible(true);
+   ScoreShow.setVisible(true);
+   ScoreEnglish_Clue.setVisible(false);
+   ScoreEnglish_Input.setVisible(false);
+   ScoreEnglish_Input.setText("");
+   ScoreSeniorMath_Clue.setVisible(false);
+   ScoreSeniorMath_Input.setVisible(false);
+   ScoreSeniorMath_Input.setText("");
+   ScoreC_Clue.setVisible(false);
+   ScoreC_Input.setVisible(false);
+   ScoreC_Input.setText("");
+   ScoreVC_Clue.setVisible(false);
+   ScoreVC_Input.setVisible(false);
+   ScoreVC_Input.setText("");
+   ScoreJAVA_Clue.setVisible(false);
+   ScoreJAVA_Input.setVisible(false);
+         ScoreJAVA_Input.setText("");
+}
+        public void emptyInput()//清空成绩输入控件
+        {
+   ScoreSno_Input.setText("");
+   ScoreEnglish_Input.setText("");
+   ScoreSeniorMath_Input.setText("");
+   ScoreC_Input.setText("");
+   ScoreVC_Input.setText("");
+   ScoreJAVA_Input.setText("");
+}
+//显示学生成绩面板中所有控件
+public void ScoreShowWhole()
+{
+   ScoreSno_Clue.setVisible(true);
+   ScoreSno_Input.setVisible(true);
+   ScoreShowClue.setVisible(false);
+   ScoreShow.setVisible(false);
+   ScoreEnglish_Clue.setVisible(true);
+   ScoreEnglish_Input.setVisible(true);
+   ScoreSeniorMath_Clue.setVisible(true);
+   ScoreSeniorMath_Input.setVisible(true);
+   ScoreC_Clue.setVisible(true);
+   ScoreC_Input.setVisible(true);
+   ScoreVC_Clue.setVisible(true);
+   ScoreVC_Input.setVisible(true);
+   ScoreJAVA_Clue.setVisible(true);
+   ScoreJAVA_Input.setVisible(true);
+}
+}
+//DataBaseControl.java
+import java.awt.*;
+import javax.swing.*;
+import java.io.*;
+import java.sql.*;
+import java.awt.event.*;
+import java.util.*;
+
+//数据库操作
+class DataBaseControl
+{
+//private String s="";
+   //登录用户信息
+     String UserRealName;
+String UserSex;
+int UserAge;
+String UserClass;
+String UserDept;
+
+//类中公有变量类型变量
+String LoginName="";
+String PW="";
+int Rank;
+    final int MaxNum=20;
+    String Student_Information[]=new String[MaxNum];
+    String Student_Score[]=new String[MaxNum];
+    String[] Database_Score={"学号","英语","高数","C","VC","JAVA"};
+String[] Database_Information={"学号","姓名","性别","年龄","班级","系别"};
+int NowScoreNum;
+int NowInformationNum;
+
+    static String temptInformation="";
+private Connection con1;
+private Statement st1;
+String str;
+
+public void init(String UserName,String PassWord,int i)
+   {
+    LoginName=UserName;
+    PW=PassWord;
+    Rank=i;
+   }
+public boolean ConnectDataBase()//连接数据源
+{
+try
+{
+   Class.forName("sun.jdbc.odbc.JdbcOdbcDriver");
+}catch(ClassNotFoundException e)
+{
+   System.out.println("Driver not found!");
+   return false;
+}
+    try
+    {
+   con1=DriverManager.getConnection("jdbc:odbc:学生管理数据库");
+   st1=con1.createStatement();
+    }catch(SQLException e)
+    {
+   System.out.println("Data Source not found!");
+   return false;
+   }
+      return true;
+    }
+    public int QueryUserLogin()//用户身份验证
+    {
+int i=0;
+   if(ConnectDataBase())
+{
+   try{
+        ResultSet rs1=st1.executeQuery("select* from UserLogin where 用户名='"+LoginName+"'");
+        while(rs1.next())
+         {
+           if((rs1.getString(3).equals(PW))&&(rs1.getInt(4)==Rank))
+             {
+              JOptionPane.showMessageDialog(null,"登录成功!\n"+rs1.getString(2)+"欢迎你使用学生管理系统",
+              "Happy Message",JOptionPane.PLAIN_MESSAGE);
+                if(Rank==1)
+              return 1;
+             else
+              return 2;
+              }//end-if
+             i++;
+            }//end-while
+        if(i==0)
+         {
+         JOptionPane.showMessageDialog(null,"该用户不存在！","Error Message",JOptionPane.ERROR_MESSAGE);
+         }
+         else
+         {
+          JOptionPane.showMessageDialog(null,"你的密码或者用户登级有误！","Error Message",
+          JOptionPane.ERROR_MESSAGE);
+          }
+          Close_database();
+      }catch(SQLException e1)
+       {
+     System.out.println(e1.toString());
+     return 0;
+       }
+    }//end-if
+     return 0;
+}
+public void ChangeUserPW(String newPW)//修改用户密码
+{
+if(ConnectDataBase())
+{
+   try
+   {
+       st1.executeUpdate("UPDATE UserLogin SET 用户密码='"+newPW+"' where 用户名='"+LoginName+"'");
+    Close_database();
+   }catch(SQLException e)
+   {
+    System.out.println(e.toString());
+    JOptionPane.showMessageDialog(null,"对数据库操作发生错误!","ERROR MESSAGE",JOptionPane.ERROR_MESSAGE);
+       return;
+   }
+            JOptionPane.showMessageDialog(null,"修改密码成功!\n请记住你的新密码.","Sucessful Message",JOptionPane.PLAIN_MESSAGE);
+}
+}
+public void ShowUserInformation()//显示用户信息
+{
+if(ConnectDataBase())
+{
+   try{
+   ResultSet sr=st1.executeQuery("select* from UserBasicInformation where 用户名='"+LoginName+"'");
+   while(sr.next())
+   {
+    UserRealName=sr.getString(2);
+    UserSex=sr.getString(3);
+    UserAge=sr.getInt(4);
+    UserClass=sr.getString(5);
+             UserDept=sr.getString(6);
+   }
+   Close_database();
+     }catch(SQLException e)
+     {
+      System.out.println("Error!!");
+     }
+    }//end-if
+   }
+
+   public void DeleteUser()//注销帐户
+   {
+    String str1;
+    if(ConnectDataBase())
+    {
+     try
+     {
+      str1="DELETE FROM UserLogin where 用户名='"+LoginName+"'";
+      str="DELETE FROM UserBasicInformation where 用户名='"+LoginName+"'";
+      st1.executeUpdate(str1);
+      st1.executeUpdate(str);
+      Close_database();//关闭数据库连接
+     }catch(SQLException e)
+     {
+      System.out.println("Error!!");
+     }
+    }
+    JOptionPane.showMessageDialog(null,"注销帐户成功！","Happy Message",JOptionPane.PLAIN_MESSAGE);
+}
+///////////////////////////////////////学生信息处理函数//////////////////////////////////////////////////////
+   public void show_DataBase_Information()//显示数据库中学生的个人基本信息
+   {
+    String Information;
+    if(ConnectDataBase())
+    {
+     try
+     {
+      str="SELECT* FROM Student_Basic_Information";
+      ResultSet s1=st1.executeQuery(str);
+      int i=0;
+      while(s1.next())
+      {
+      if(i>MaxNum)
+     break;
+      Information=s1.getString(1)+"\t"+s1.getString(2)+"\t"+s1.getString(3)+"\t"+s1.getLong(4)
+      +"\t"+s1.getString(5)+"\t"+s1.getString(6)+"\n";
+      Student_Information[i]=Information;
+      i++;
+      }
+     NowInformationNum=i;
+     Close_database();
+       }catch(SQLException e)
+       {
+     System.out.println(e.toString());
+    }
+}
+}
+public boolean Query_Database_Information(String sno)//显示查询数据库中学生信息
+{
+if(ConnectDataBase())
+         {
+    try
+    {
+     str="select* from Student_Basic_Information where 学号='"+sno+"'";
+     ResultSet s1=st1.executeQuery(str);
+     int i=0;
+     while(s1.next())
+     {
+      temptInformation=s1.getString(1)+"\t"+s1.getString(2)+"\t"+s1.getString(3)+"\t"+s1.getLong(4)
+      +"\t"+s1.getString(5)+"\t"+s1.getString(6)+"\n";
+      i++;
+     }
+        Close_database();
+        if(i>0)
+        return true;
+    }catch(SQLException e)
+    {
+     e.printStackTrace();
+     return false;
+    }
+     }
+      return false;
+}
+    public void Add_Database_Information(String sno,String name,String ***,int age,String classname,String dept)
+    {//向数据库中加入新生的基本信息
+if(ConnectDataBase())
+{
+   try
+   {
+                str="INSERT INTO Student_Basic_Information"+"(学号,姓名,性别,年龄,班级,系别)";
+                str=str+"VALUES('"+sno+"','"+name+"','"+***+"',"+age+",'"+classname+"','"+dept+"')";
+                st1.executeUpdate(str);
+                Close_database();
+   }catch(SQLException e)
+   {
+    e.printStackTrace();
+    return;
+   }
+   JOptionPane.showMessageDialog(null,"加入新生记录操作成功！","HAPPY MESSAGE",JOptionPane.PLAIN_MESSAGE);
+}
+}
+
+public boolean Del_Database_Information(String sno)//删除数据库中某个学生的基本信息
+   {
+    if(ConnectDataBase())
+    {
+     try
+     {
+      str="DELETE FROM Student_Basic_Information WHERE 学号='"+sno+"'";
+      st1.executeUpdate(str);
+      Close_database();
+     }catch(SQLException e)
+     {
+      e.printStackTrace();
+      return false;
+     }
+     return true;
+    }
+    return false;
+          }
+    public void Modify_Database_Information(String sno,String sno1,String name,int age,String classname,String dept)
+       {//修改数据库中学生基本信息
+            if(ConnectDataBase())
+            {
+    try
+    {
+     str="update Student_Basic_Information set 学号='"+sno1+"' where 学号='"+sno+"'";
+     st1.executeUpdate(str);
+     str="update Student_Basic_Information set 姓名='"+name+"' where 学号='"+sno1+"'";
+     st1.executeUpdate(str);
+     str="update Student_Basic_Information set 年龄="+age+" where 学号='"+sno1+"'";
+     st1.executeUpdate(str);
+     str="update Student_Basic_Information set 班级='"+classname+"' where 学号='"+sno1+"'";
+     st1.executeUpdate(str);
+     str="update Student_Basic_Information set 系别='"+dept+"' where 学号='"+sno1+"'";
+     st1.executeUpdate(str);
+     Close_database();
+    }catch(SQLException e)
+    {
+     e.printStackTrace();
+     return;
+    }
+    JOptionPane.showMessageDialog(null,"修改学生信息记录操作成功！","HAPPY MESSAGE",JOptionPane.PLAIN_MESSAGE);
+   }
+}
+////////////////////////////////////////学生成绩函数///////////////////////////////////////////////
+
+public void show_DataBase_Score()//显示数据库中学生的成绩信息
+{
+String score;
+     if(ConnectDataBase())
+     {
+   try
+   {
+    int i=0;
+    str="SELECT* FROM StudentScore";
+             ResultSet s2=st1.executeQuery(str);
+             while(s2.next())
+             {
+    if(i>MaxNum)
+    break;
+          score=s2.getString(1)+"\t"+s2.getLong(2)+"\t"+s2.getLong(3)+"\t"+s2.getLong(4)+"\t"
+          +s2.getLong(5)+"\t"+s2.getLong(6)+"\n";
+          Student_Score[i]=score;
+          i++;
+          }
+          NowScoreNum=i;
+    Close_database();
+   }catch(SQLException e)
+   {
+    System.out.println(e.toString());
+   }
+}
+}
+public boolean QueryScoreFunction(String SnoN)
+{//根据学号查询学生的成绩信息
+   String score;
+   boolean find=false;
+   if(ConnectDataBase())
+   {
+    try
+    {
+     str="SELECT* FROM StudentScore WHERE 学号='"+SnoN+"'";
+     ResultSet s2=st1.executeQuery(str);
+     while(s2.next())
+     {
+       find=true;
+       score=s2.getString(1)+"\t"+s2.getLong(2)+"\t"+s2.getLong(3)+"\t"
+       +s2.getLong(4)+"\t"+s2.getLong(5)+"\t"+s2.getLong(6);
+       Student_Score[NowScoreNum]=score;
+      }
+     Close_database();
+     }catch(SQLException e)
+         {
+       e.printStackTrace();
+         }
+    }
+    if(find)
+    return true;
+    else
+    return false;
+}
+    public void addStudentScoreInformation(String sno,int englishscore,int seniorscore,int cscore,int vcscore,
+    int javascore)
+    {//加入学生的成绩信息
+if(ConnectDataBase())
+{
+   try
+   {
+    str="INSERT INTO StudentScore"+"(学号,英语,高数,C,VC,JAVA)";
+    str=str+"VALUES('"+sno+"',"+englishscore+","+seniorscore+","
+    +cscore+","+vcscore+","+javascore+")";
+    st1.executeUpdate(str);
+    Close_database();
+   }catch(SQLException e)
+   {
+    JOptionPane.showMessageDialog(null,"数据库操作发生异常\n加入学生成绩记录操作失败！","ERROR MESSAGE",
+    JOptionPane.ERROR_MESSAGE);
+    return;
+   }
+   JOptionPane.showMessageDialog(null,"加入新生记录操作成功！","HAPPY MESSAGE",JOptionPane.PLAIN_MESSAGE);
+   }
+}
+
+public void DelScoreFunction(String sno)
+{//删除学生的成绩信息
+if(ConnectDataBase())
+{
+   try
+   {
+    str="DELETE FROM StudentScore WHERE 学号='"+sno+"'";
+    st1.executeUpdate(str);
+   }catch(SQLException e)
+   {
+    JOptionPane.showMessageDialog(null,"数据库操作发生异常\n删除学生成绩记录操作失败！","ERROR MESSAGE",
+   JOptionPane.PLAIN_MESSAGE);
+    return;
+   }
+   JOptionPane.showMessageDialog(null,"删除学生成绩记录操作成功！","HAPPY MESSAGE",
+   JOptionPane.PLAIN_MESSAGE);
+     }
+}
+public void ModifyStudentScoreInformation(String sno1,String sno,int englishscore,int seniorscore,int cscore,int vcscore,
+    int javascore)//修改数据库中学生成绩信息
+    {
+if(ConnectDataBase())
+{
+   try
+   {
+    str="update StudentScore set 学号='"+sno1+"' where 学号='"+sno+"'";
+    st1.executeUpdate(str);
+    str="update StudentScore set 英语="+englishscore+" where 学号='"+sno1+"'";
+    st1.executeUpdate(str);
+    str="update StudentScore set 高数="+seniorscore+" where 学号='"+sno1+"'";
+    st1.executeUpdate(str);
+    str="update StudentScore set C="+cscore+" where 学号='"+sno1+"'";
+    st1.executeUpdate(str);
+    str="update StudentScore set VC="+vcscore+" where 学号='"+sno1+"'";
+    st1.executeUpdate(str);
+    str="update StudentScore set JAVA="+javascore+" where 学号='"+sno1+"'";
+    st1.executeUpdate(str);
+             Close_database();
+   }catch(SQLException e)
+   {
+    JOptionPane.showMessageDialog(null,"数据库操作发生异常\n修改学生成绩记录操作失败！","ERROR MESSAGE",
+       JOptionPane.PLAIN_MESSAGE);
+    return;
+   }
+   JOptionPane.showMessageDialog(null,"修改学生成绩记录操作成功！","HAPPY MESSAGE",
+   JOptionPane.PLAIN_MESSAGE);
+}
+}
+//关闭数据源
+    public void Close_database()
+    {
+     try
+     {
+      st1.close();
+      con1.close();
+     }catch(SQLException e)
+     {
+      System.out.println("Error!!!!");
+     }
+   }
+}
+//
+
+//MainMenu.java
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.io.*;
+import java.util.*;
+public class MainMenu extends JFrame implements ActionListener
+{
+//三种常用字体的定义
+Font newTitleFont=new Font("楷体",Font.BOLD,40);
+Font newSmallTitleFont=new Font("楷体",Font.BOLD,25);
+Font newCommonFont=new Font("宋体",Font.BOLD,20);
+Font newSubMenuFont=new Font("宋体",Font.BOLD,15);
+Font NewSubMenuFont=new Font("宋体",Font.BOLD,10);
+    //用户等级数组定义
+String s[]={"一般用户"," 管理员"};
+//定义确认对话框图标
+ImageIcon thinker=new ImageIcon("ICON//thinker.gif");
+//定义面板
+JPanel MaxPanel=new JPanel();//总面板
+JPanel LoginPanel=new JPanel();//登录面板
+JPanel PaperPanel=new JPanel();//界面面板
+JPanel ChangePWPanel=new JPanel();//修改密码面板
+JPanel UserInformationPanel=new JPanel();//个人信息面板
+JPanel SystemClue=new JPanel();//系统版本信息
+
+//主窗口
+JFrame mainMenu=new JFrame("学生管理系统");
+JMenuBar menuBar=new JMenuBar();
+JMenu menu1=new JMenu("系统服务");
+JMenu menu2=new JMenu("学生信息管理");
+JMenu menu3=new JMenu("学生成绩管理");
+JMenu menu5=new JMenu("关于帮助文档");
+    //主界面图形定义
+JLabel deskpaper=new JLabel(new ImageIcon("Image//003.jpg"));
+JMenuItem UserLoginItem=new JMenuItem("用户登录");
+JMenuItem ChangePWItem=new JMenuItem("修改密码");
+JMenuItem UserInformationItem=new JMenuItem("个人信息");
+JMenuItem DelUserItem=new JMenuItem("注销帐户");
+JMenuItem ExitSystemItem=new JMenuItem("退出系统");
+JMenuItem informationShowItem=new JMenuItem("学生信息浏览");
+JMenuItem informationQueryItem=new JMenuItem("学生信息查询");
+JMenuItem InformationModifyItem=new JMenuItem("修改学生信息");
+JMenuItem InformationAddItem=new JMenuItem("增加学生信息");
+JMenuItem informationDelItem=new JMenuItem("删除学生信息");
+JMenuItem scoreShowItem=new JMenuItem("学生成绩浏览");
+JMenuItem scoreQueryItem=new JMenuItem("学生成绩查询");
+JMenuItem scoreAddItem=new JMenuItem("增加学生成绩");
+JMenuItem scoreModifyItem=new JMenuItem("修改学生信息");
+JMenuItem scoreDelItem=new JMenuItem("删除学生信息");
+
+JMenuItem helpItem=new JMenuItem(" 帮 助 文 档 ");
+JMenuItem aboutItem=new JMenuItem(" 关 于 系 统 ");
+JLabel SystemIntroduce=new JLabel(new ImageIcon("Image//04.jpg"));
+
+   //各个面板的控件定义
+
+//定义登录面板控件
+JLabel WelcomeText=new JLabel(" 欢 迎 使 用 学 生 管 理 系 统 ");
+JLabel RankClue=new JLabel("用户等级");
+JTextField UserName=new JTextField();
+JPasswordField PassWord=new JPasswordField();
+JLabel UserClue=new JLabel("用 户 名");
+JLabel PWClue=new JLabel("用户密码");
+ComboBoxModel mode=new AModel();
+JComboBox UserRank=new JComboBox(mode);
+JButton LoginSystem=new JButton("登录");
+JButton CancelSystem=new JButton("取消");
+//定义修改密码面板控件
+JLabel OldPWClue=new JLabel("输入你的原始密码:");
+JLabel NewPWClue1=new JLabel("请输入你的新密码:");
+JLabel NewPWClue2=new JLabel("请再次输入新密码:");
+JPasswordField OldPW_Input=new JPasswordField(15);
+JPasswordField NewPW_Input1=new JPasswordField(15);
+JPasswordField NewPW_Input2=new JPasswordField(15);
+JButton ConfirmButton=new JButton("确认修改");
+JButton CancelButton=new JButton("取消修改");
+//定义个人信息面板控件
+JLabel InformationClue=new JLabel("以下是你的个人基本信息：");
+JTextArea MyInformation=new JTextArea();
+
+//定义学生信息管理面板
+     Student_InforPanel Student_Information_Control=new Student_InforPanel();
+     //定义学生成绩管理面板
+    Student_ScorePanel Student_Score_Control=new Student_ScorePanel();
+    //定义帮助文档面板
+    JHelpTextPanel SystemHelp=new JHelpTextPanel();
+    //定义连接数据库类
+    static DataBaseControl myDatabase=new DataBaseControl();
+    int i;
+public MainMenu()
+{
+//各个面板的布局设置
+   Container c=mainMenu.getContentPane();
+   MaxPanel.setLayout(new CardLayout());
+   PaperPanel.setLayout(new BorderLayout());
+   LoginPanel.setLayout(null);
+   ChangePWPanel.setLayout(null);
+   UserInformationPanel.setLayout(null);
+   Student_Score_Control.setLayout(null);
+   Student_Information_Control.setLayout(null);
+   SystemHelp.setLayout(null);
+   SystemClue.setLayout(new FlowLayout());
+     //系统菜单布局设置
+      menu1.setFont(newSubMenuFont);
+      UserLoginItem.addActionListener(this);
+   menu1.add(UserLoginItem);
+      menu1.add(ChangePWItem);
+   ChangePWItem.setEnabled(false);
+   ChangePWItem.addActionListener(this);
+   menu1.add(UserInformationItem);
+   UserInformationItem.setEnabled(false);
+   UserInformationItem.addActionListener(this);
+   menu1.add(DelUserItem);
+   DelUserItem.setEnabled(false);
+   DelUserItem.addActionListener(this);
+   menu1.addSeparator();
+   menu1.add(ExitSystemItem);
+   ExitSystemItem.addActionListener(this);
+   ExitSystemItem.setEnabled(false);
+    //学生信息管理菜单布局设置
+   menu2.setFont(newSubMenuFont);
+   menu2.add(informationShowItem);
+   informationShowItem.addActionListener(this);
+   menu2.add(informationQueryItem);
+   informationQueryItem.addActionListener(this);
+   menu2.add(InformationModifyItem);
+   InformationModifyItem.addActionListener(this);
+   menu2.add(InformationAddItem);
+   InformationAddItem.addActionListener(this);
+   menu2.add(informationDelItem);
+   informationDelItem.addActionListener(this);
+   menu2.setEnabled(false);
+    //学生成绩管理菜单布局设置
+   menu3.setFont(newSubMenuFont);
+   menu3.add(scoreShowItem);
+   scoreShowItem.addActionListener(this);
+   menu3.add(scoreQueryItem);
+   scoreQueryItem.addActionListener(this);
+   menu3.add(scoreAddItem);
+   scoreAddItem.addActionListener(this);
+   menu3.add(scoreModifyItem);
+   scoreModifyItem.addActionListener(this);
+   menu3.add(scoreDelItem);
+   scoreDelItem.addActionListener(this);
+   menu3.setEnabled(false);
+
+    //帮助文档及系统版本菜单设置
+   menu5.setFont(newSubMenuFont);
+   menu5.add(helpItem);
+   menu5.add(aboutItem);
+      menu5.setEnabled(false);
+   menuBar.add(menu1);
+   menuBar.add(menu2);
+   menuBar.add(menu3);
+   menuBar.add(menu5);
+//界面面板
+      PaperPanel.add(deskpaper);
+//登录面板的布局设置
+      LoginPanel.setBackground(Color.orange);
+   WelcomeText.setBounds(60,75,580,50);
+   UserClue.setBounds(200,200,120,30);
+   UserName.setBounds(310,200,120,30);
+   PWClue.setBounds(200,257,120,30);
+   PassWord.setBounds(310,260,120,30);
+   UserRank.setBounds(310,320,120,30);
+   RankClue.setBounds(200,322,120,30);
+   LoginSystem.setBounds(170,400,100,30);
+      CancelSystem.setBounds(360,400,100,30);
+      PassWord.setEchoChar('●');
+   LoginPanel.add(WelcomeText);
+   LoginPanel.add(UserClue);
+   LoginPanel.add(UserName);
+   LoginPanel.add(PWClue);
+   LoginPanel.add(PassWord);
+   LoginPanel.add(UserRank);
+   LoginPanel.add(RankClue);
+   LoginPanel.add(LoginSystem);
+   LoginPanel.add(CancelSystem);
+   UserClue.setFont(newCommonFont);
+   PWClue.setFont(newCommonFont);
+   WelcomeText.setFont(newTitleFont);
+   UserRank.setFont(newCommonFont);
+   RankClue.setFont(newCommonFont);
+      LoginSystem.setFont(newCommonFont);
+      LoginSystem.addActionListener(this);
+      CancelSystem.setFont(newCommonFont);
+      CancelSystem.addActionListener(this);
+      UserRank.addActionListener(this);
+
+//修改密码面板
+      ChangePWPanel.setBackground(Color.orange);
+      OldPWClue.setBounds(100,100,200,30);
+      OldPW_Input.setBounds(310,100,150,30);
+      NewPWClue1.setBounds(100,173,200,30);
+      NewPW_Input1.setBounds(310,173,150,30);
+      NewPWClue2.setBounds(100,240,200,30);
+      NewPW_Input2.setBounds(310,240,150,30);
+      ConfirmButton.setBounds(130,355,120,40);
+      CancelButton.setBounds(390,355,120,40);
+      OldPW_Input.setEchoChar('●');
+      NewPW_Input1.setEchoChar('●');
+      NewPW_Input2.setEchoChar('●');
+      OldPWClue.setFont(newCommonFont);
+      NewPWClue1.setFont(newCommonFont);
+      NewPWClue2.setFont(newCommonFont);
+      ConfirmButton.setFont(newCommonFont);
+      CancelButton.setFont(newCommonFont);
+      ConfirmButton.addActionListener(this);
+      CancelButton.addActionListener(this);
+      ChangePWPanel.add(OldPWClue);
+      ChangePWPanel.add(OldPW_Input);
+      ChangePWPanel.add(NewPWClue1);
+      ChangePWPanel.add(NewPW_Input1);
+      ChangePWPanel.add(NewPWClue2);
+      ChangePWPanel.add(NewPW_Input2);
+      ChangePWPanel.add(ConfirmButton);
+      ChangePWPanel.add(CancelButton);
+//个人信息面板
+      UserInformationPanel.setBackground(Color.orange);
+      InformationClue.setBounds(50,80,400,80);
+      InformationClue.setFont(newSmallTitleFont);
+      MyInformation.setBounds(60,160,550,350);
+      UserInformationPanel.add(InformationClue);
+      UserInformationPanel.add(MyInformation);
+      MyInformation.setEditable(false);
+      MyInformation.setBackground(Color.orange);
+
+//帮助文档
+     helpItem.addActionListener(this);
+     aboutItem.addActionListener(this);
+     SystemClue.add(SystemIntroduce);
+
+//各个面板依次加入容器
+   c.add(menuBar);
+   MaxPanel.add("deskpaper",PaperPanel);
+   MaxPanel.add("login",LoginPanel);
+   MaxPanel.add("ChangePW",ChangePWPanel);
+   MaxPanel.add("UserInformation",UserInformationPanel);
+   MaxPanel.add("StudentInformationControl",Student_Information_Control);
+   MaxPanel.add("StudentScoreInformation", Student_Score_Control);
+   MaxPanel.add("help text",SystemHelp);
+   MaxPanel.add("System Clue",SystemClue);
+   ((CardLayout)MaxPanel.getLayout()).show(MaxPanel,"deskpaper");
+   c.add(MaxPanel);
+   mainMenu.setJMenuBar(menuBar);
+   mainMenu.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+   mainMenu.setSize(680,600);
+   mainMenu.setLocation(100,100);
+   mainMenu.setResizable(false);
+   mainMenu.setVisible(true);
+   }//
+   void showAllMenuItems()//管理员的菜单显示
+   {
+    UserLoginItem.setEnabled(false);
+       ChangePWItem.setEnabled(true);
+       UserInformationItem.setEnabled(true);
+       DelUserItem.setEnabled(true);
+       ExitSystemItem.setEnabled(true);
+       menu2.setEnabled(true);
+       menu3.setEnabled(true);
+       menu5.setEnabled(true);
+}
+void showPartMenuItems()//一般用户的菜单显示
+{
+UserLoginItem.setEnabled(false);
+ChangePWItem.setEnabled(true);
+UserInformationItem.setEnabled(true);
+DelUserItem.setEnabled(true);
+ExitSystemItem.setEnabled(true);
+InformationModifyItem.setEnabled(false);
+InformationAddItem.setEnabled(false);
+informationDelItem.setEnabled(false);
+scoreAddItem.setEnabled(false);
+scoreDelItem.setEnabled(false);
+scoreModifyItem.setEnabled(false);
+menu2.setEnabled(true);
+menu3.setEnabled(true);
+        menu5.setEnabled(true);
+}
+//定义用户等级ComboBox模式
+class AModel extends DefaultComboBoxModel
+   {
+     AModel()
+     {
+      for(int i=0; i < s.length; i++)
+         addElement(s[i]);
+      }
+   }
+
+///////////////////////////////////////////////菜单事件监听////////////////////////////////////////////////
+   public void actionPerformed(ActionEvent e)
+   {
+Object source=e.getSource();//得到事件源
+String s="";
+if(source==UserLoginItem)//显示系统登录界面
+    {
+         ((CardLayout)MaxPanel.getLayout()).show(MaxPanel,"login");
+     }
+if(source==LoginSystem)//登录系统事件触发
+    {
+   myDatabase.init(UserName.getText(),PassWord.getText(),i);
+   int i=myDatabase.QueryUserLogin();
+      if(i==1)
+      {
+   showAllMenuItems();
+   ((CardLayout)MaxPanel.getLayout()).show(MaxPanel,"deskpaper");
+   }
+      if(i==2)
+      {
+         showPartMenuItems();
+         ((CardLayout)MaxPanel.getLayout()).show(MaxPanel,"deskpaper");
+      }
+    }
+     if(source==CancelSystem)//取消登录事件触发
+       {
+      ((CardLayout)MaxPanel.getLayout()).show(MaxPanel,"deskpaper");
+     }
+if(source==UserRank)//用户等级选择事件触发
+    {
+      s=(String)UserRank.getSelectedItem();
+         if(s.equals(" 管理员"))
+       i=1;
+      else
+    i=2;
+        }
+     if(source==ChangePWItem)//修改密码子菜单事件的触发
+    {
+      ((CardLayout)MaxPanel.getLayout()).show(MaxPanel,"ChangePW");
+     }
+if(source==ConfirmButton)//确认修改密码按纽事件触发
+   {
+   if(!(OldPW_Input.getText()).equals(myDatabase.PW))
+   {
+     JOptionPane.showMessageDialog(null,"原始密码错误，请重新输入","Error Message!",JOptionPane.ERROR_MESSAGE);
+     OldPW_Input.setText("");
+     NewPW_Input1.setText("");
+     NewPW_Input2.setText("");
+     return;
+    }
+    if(NewPW_Input1.getText().length()<6||NewPW_Input2.getText().length()<6)
+    {
+     JOptionPane.showMessageDialog(null,"为了帐户的安全起见,建议:\n密码长度应该大于6位，请重新输入.",
+     "Warning Message!",JOptionPane.WARNING_MESSAGE);
+     OldPW_Input.setText("");
+     NewPW_Input1.setText("");
+     NewPW_Input2.setText("");
+     return;
+    }
+    if(!(NewPW_Input1.getText()).equals(NewPW_Input2.getText()))
+    {
+     JOptionPane.showMessageDialog(null,"新密码的两次输入不一致,请重新输入!",
+     "Warning Message!",JOptionPane.WARNING_MESSAGE);
+     OldPW_Input.setText("");
+     NewPW_Input1.setText("");
+     NewPW_Input2.setText("");
+     return;
+    }
+    myDatabase.ChangeUserPW(NewPW_Input1.getText());
+      }
+      if(source==CancelButton)//取消修改密码，界面自动转回到主界面
+       {
+       ((CardLayout)MaxPanel.getLayout()).show(MaxPanel,"deskpaper");
+     }
+    if(source==UserInformationItem)//用户基本信息触发事件
+    {
+      ((CardLayout)MaxPanel.getLayout()).show(MaxPanel,"UserInformation");
+       myDatabase.ShowUserInformation();
+       InformationClue.setText("以下是你的个人基本信息：");
+       MyInformation.setFont(newCommonFont);
+       MyInformation.setText("");
+       if(myDatabase.Rank==1)
+       MyInformation.append("用户名:"+myDatabase.LoginName+"\n用户级别:管理员"+"\n真实姓名:"+myDatabase.UserRealName+
+       "\n性别:"+myDatabase.UserSex+"\n年龄:"+myDatabase.UserAge+"\n班级:"+myDatabase.UserClass+"\n系别:"+myDatabase.UserDept);
+       else
+       MyInformation.append("用户名:"+myDatabase.LoginName+"\n用户级别:一般用户"+"\n真实姓名:"+myDatabase.UserRealName+"\n性别:"+myDatabase.UserSex+"\n年龄:"+myDatabase.UserAge+"\n班级:"+myDatabase.UserClass+"\n系别:"+myDatabase.UserDept);
+    }
+    if(source==DelUserItem)//注销帐户事件触发
+    {
+   int result=JOptionPane.showConfirmDialog(null,"确定要注销此帐户吗？",
+     "Confirm Message",JOptionPane.YES_NO_OPTION,JOptionPane.QUESTION_MESSAGE,thinker);
+     if(result==JOptionPane.YES_OPTION)
+     {
+       myDatabase.DeleteUser();
+       //System.exit(0);
+     }
+    }
+    if(source==ExitSystemItem)//退出系统的事件触发
+           {
+      myDatabase.Close_database();
+       System.exit(0);
+    }
+   //***********************************学生信息面板事件触发**********************************************
+    if(source==informationShowItem)//学生信息浏览事件触发
+    {
+     ((CardLayout)MaxPanel.getLayout()).show(MaxPanel,"UserInformation");
+      InformationClue.setText("数据库中学生基本信息:");
+      MyInformation.setText("");
+      MyInformation.setFont(newSubMenuFont);
+      myDatabase.show_DataBase_Information();
+      ShowInforMember();
+    }
+    if(source==informationQueryItem)//学生信息查询事件触发
+    {
+    ((CardLayout)MaxPanel.getLayout()).show(MaxPanel,"StudentInformationControl");
+     Student_Information_Control.OnlyShowSno();
+     Student_Information_Control.QueryClue.setText("以下是你要查询的学生信息:");
+     Student_Information_Control.QueryInforShow.setText("");
+           Student_Information_Control.Add_StudentInformation.setVisible(false);
+     Student_Information_Control.Del_StudentInformation.setVisible(false);
+     Student_Information_Control.Query_StudentInformation.setVisible(true);
+     Student_Information_Control.Modify_StudentInformation.setVisible(false);
+       }
+       if(source==InformationModifyItem) //学生信息修改面板的事件出发
+       {
+     ((CardLayout)MaxPanel.getLayout()).show(MaxPanel,"StudentInformationControl");
+     Student_Information_Control.Add_StudentInformation.setVisible(false);
+     Student_Information_Control.Del_StudentInformation.setVisible(false);
+     Student_Information_Control.Query_StudentInformation.setVisible(false);
+     Student_Information_Control.Modify_StudentInformation.setVisible(true);
+     Student_Information_Control.ShowWhole();
+     Student_Information_Control.StudentSex_Clue.setVisible(false);
+     Student_Information_Control.StudentSex_Input.setVisible(false);
+     String sno=JOptionPane.showInputDialog("请输入你要修改的学生的学号:");
+     if(myDatabase.Query_Database_Information(sno))
+       {
+        String s1="你要修改的学生的原始信息为:\n"+DataBaseControl.temptInformation+"输入修改后信息后，点击修改学生信息按钮.";
+        JOptionPane.showMessageDialog(null,s1,"SHOW MESSAGE",JOptionPane.PLAIN_MESSAGE);
+        Student_Information_Control.SnoOrigin=sno;
+       }
+     else
+        JOptionPane.showMessageDialog(null,"数据库中没有你要修改的学生的原始信息.\n请仔细重新输入学号.","SHOW MESSAGE",JOptionPane.PLAIN_MESSAGE);
+}
+    if(source==InformationAddItem)//学生信息增加事件触发
+    {
+     ((CardLayout)MaxPanel.getLayout()).show(MaxPanel,"StudentInformationControl");
+     Student_Information_Control.ShowWhole();
+     Student_Information_Control.Add_StudentInformation.setVisible(true);
+     Student_Information_Control.Del_StudentInformation.setVisible(false);
+     Student_Information_Control.Query_StudentInformation.setVisible(false);
+     Student_Information_Control.Modify_StudentInformation.setVisible(false);
+    }
+    if(source==informationDelItem)//学生信息删除事件触发
+    {
+     ((CardLayout)MaxPanel.getLayout()).show(MaxPanel,"StudentInformationControl");
+     Student_Information_Control.OnlyShowSno();
+     Student_Information_Control.QueryClue.setText("以下是你要删除的学生信息:");
+     Student_Information_Control.QueryInforShow.setText("");
+     Student_Information_Control.Add_StudentInformation.setVisible(false);
+     Student_Information_Control.Query_StudentInformation.setVisible(false);
+     Student_Information_Control.Del_StudentInformation.setVisible(true);
+     Student_Information_Control.Modify_StudentInformation.setVisible(false);
+    }
+
+///////////////////////////学生成绩管理菜单事件触发///////////////////////////////////////////
+    if(source==scoreShowItem)//浏览学生成绩信息
+    {
+     ((CardLayout)MaxPanel.getLayout()).show(MaxPanel,"UserInformation");
+     InformationClue.setText("数据库中学生成绩信息为:");
+     InformationClue.setFont(newCommonFont);
+     MyInformation.setText("");
+     MyInformation.setFont(newSubMenuFont);
+     myDatabase.show_DataBase_Score();
+     ShowScoreMember();
+    }
+    if(source==scoreQueryItem)//查询学生成绩信息
+    {
+     ((CardLayout)MaxPanel.getLayout()).show(MaxPanel,"StudentScoreInformation");
+      Student_Score_Control.ScoreShowOnlySno();
+      Student_Score_Control.ScoreShowClue.setText("以下是你要查询的学生成绩信息:");
+      Student_Score_Control.ScoreShow.setText("");
+      Student_Score_Control.Add_ScoreInformation.setVisible(false);
+      Student_Score_Control.Query_ScoreInformation.setVisible(true);
+      Student_Score_Control.Del_ScoreInformation.setVisible(false);
+      Student_Score_Control.Modify_ScoreInformation.setVisible(false);
+    }
+    if(source==scoreAddItem)//增加学生成绩信息
+    {
+     ((CardLayout)MaxPanel.getLayout()).show(MaxPanel,"StudentScoreInformation");
+      Student_Score_Control.ScoreShowWhole();
+      Student_Score_Control.emptyInput();
+      Student_Score_Control.Add_ScoreInformation.setVisible(true);
+      Student_Score_Control.Query_ScoreInformation.setVisible(false);
+      Student_Score_Control.Del_ScoreInformation.setVisible(false);
+      Student_Score_Control.Modify_ScoreInformation.setVisible(false);
+    }
+    if(source==scoreModifyItem)//修改学生成绩信息
+    {
+     ((CardLayout)MaxPanel.getLayout()).show(MaxPanel,"StudentScoreInformation");
+      Student_Score_Control.ScoreShowWhole();
+      Student_Score_Control.emptyInput();
+      Student_Score_Control.Add_ScoreInformation.setVisible(false);
+      Student_Score_Control.Query_ScoreInformation.setVisible(false);
+      Student_Score_Control.Del_ScoreInformation.setVisible(false);
+      Student_Score_Control.Modify_ScoreInformation.setVisible(true);
+      String sno=JOptionPane.showInputDialog("请输入要修改的学生的学号:");
+      if(myDatabase.QueryScoreFunction(sno))
+        {
+      String s1="你要修改的学生成绩信息为:\n";
+      s1+=myDatabase.Student_Score[myDatabase.NowScoreNum];
+      s1+="\n请输入你修改后的信息，点击修改学生成绩信息按纽!";
+        JOptionPane.showMessageDialog(null,s1,"SHOW MESSAGE",JOptionPane.PLAIN_MESSAGE);
+                 Student_Score_Control.ScoreSno=sno;
+      }
+            else
+              JOptionPane.showMessageDialog(null,"对不起，数据库中没有你想要修改的学生成绩信息.","ERROR MESSAGE",
+              JOptionPane.ERROR_MESSAGE);
+    }
+    if(source==scoreDelItem)//删除学生成绩信息
+    {
+     ((CardLayout)MaxPanel.getLayout()).show(MaxPanel,"StudentScoreInformation");
+      Student_Score_Control.ScoreShowOnlySno();
+      Student_Score_Control.ScoreShow.setText("");
+      Student_Score_Control.ScoreShowClue.setText("以下是你要删除的学生成绩信息:");
+      Student_Score_Control.Add_ScoreInformation.setVisible(false);
+      Student_Score_Control.Query_ScoreInformation.setVisible(false);
+      Student_Score_Control.Del_ScoreInformation.setVisible(true);
+      Student_Score_Control.Modify_ScoreInformation.setVisible(false);
+    }
+    if(source==helpItem)
+    {
+     ((CardLayout)MaxPanel.getLayout()).show(MaxPanel,"help text");
+     BufferedInputStream outfile;
+     try
+     {
+    FileInputStream inputfile=new FileInputStream("运行说明.txt");
+    outfile=new BufferedInputStream(inputfile);
+     }catch(IOException exx)
+     {
+      JOptionPane.showMessageDialog(null,"帮助文档不存在!",
+      "错误信息",JOptionPane.ERROR_MESSAGE);
+      return;
+     }
+     byte helptext[]=new byte[9000];
+     try
+     {
+      while((outfile.read(helptext,0,9000))!=-1)
+      {
+       String s1=new String(helptext,0,9000);
+       SystemHelp.HelpText.append(s1+"\n");
+      }
+      outfile.close();
+      SystemHelp.HelpText.setEnabled(false);
+     }catch(IOException ex)
+     {
+      JOptionPane.showMessageDialog(null,"文件读写发生错误！",
+      "异常消息",JOptionPane.ERROR_MESSAGE);
+      return;
+     }
+    }
+    if(source==aboutItem)
+    {
+((CardLayout)MaxPanel.getLayout()).show(MaxPanel,"System Clue");
+}
+}
+     public void ShowInforMember()//复制数据库中学生信息
+{
+for(int i=0;i<myDatabase.NowInformationNum;i++)
+   MyInformation.append(myDatabase.Student_Information[i]);
+}
+public void ShowScoreMember()//复制数据库中学生成绩信息
+{
+MyInformation.append("学号\t\t英语\t高数\tC\tVC\tJAVA\n");
+for(int i=0;i<myDatabase.NowScoreNum;i++)
+   MyInformation.append(myDatabase.Student_Score[i]);
+}
+
+
+public class Student_Management_System{
+public static void main(String args[])//主函数
+   {
+    new MainMenu();
+   }
+}
+}
